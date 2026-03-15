@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: bus-depot-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-flask.txt
+    startCommand: python app.py
+    envVars:
+      - key: FLASK_HOST
+        value: 0.0.0.0
+      - key: SERVER_CAMERA_ENABLED
+        value: 0
+      - key: FIRESTORE_SYNC_ENABLED
+        value: 0
+      - key: MYSQL_HOST
+        sync: false
+      - key: MYSQL_PORT
+        value: 3306
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        value: bus_depot
+      - key: FLASK_SECRET_KEY
+        generateValue: true
