@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Depot Scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Sora:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app-glass.css') }}">
+  <script defer src="{{ url_for('static', filename='scanner.js') }}"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="glass topbar">
+      <div>
+        <p class="eyebrow"> </p>
+        <h1>Bus Drivers entry/exit Scanner</h1>
+        <p class="subtle">Home Page</p>
+      </div>
+      <nav class="nav-links">
+        <a class="nav-pill is-active" href="/scanner">Scanner</a>
+        <a class="nav-pill" href="/dashboard">Dashboard</a>
+        <a class="nav-pill" href="/report">Report</a>
+        <a class="nav-pill" href="/admin/login">Admin Login</a>
+      </nav>
+    </header>
+
+    <section class="grid-two">
+      <article class="glass card">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">Live Feed</p>
+            <h2>Entry/Exit QR Scanner</h2>
+          </div>
+          <button id="restartCameraBtn" class="ghost-btn" type="button">Restart Camera</button>
+        </div>
+        <div class="video-wrap">
+          <img src="/video_feed" alt="Live camera stream">
+        </div>
+        <div class="badge-row">
+          <span class="status-chip" id="cameraChip">Camera: checking...</span>
+          <span class="status-chip" id="dbChip">MySQL: checking...</span>
+          <span class="status-chip" id="firestoreChip">Firestore: checking...</span>
+        </div>
+      </article>
+
+      <article class="glass card">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">Scan State</p>
+            <h2>Realtime Detection</h2>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-block">
+            <label>Last scanned QR</label>
+            <p id="lastQr">Waiting for scan...</p>
+          </div>
+          <div class="info-block">
+            <label>Detected at</label>
+            <p id="lastQrAt">-</p>
+          </div>
+          <div class="info-block full">
+            <label>Last action</label>
+            <p id="lastEventMessage">No events yet.</p>
+          </div>
+        </div>
+
+        <div class="register-panel" id="registerPanel">
+          <div class="panel-title">
+            <p class="eyebrow">New QR Found</p>
+            <h3>Register Driver</h3>
+          </div>
+          <form id="registerForm" class="form-stack">
+            <label>
+              <span>QR Code</span>
+              <input type="text" id="regQrCode" name="qr_code" readonly>
+            </label>
+            <label>
+              <span>Driver ID</span>
+              <input type="text" id="regDriverId" name="driver_id" placeholder=" " required>
+            </label>
+            <label>
+              <span>Driver Name</span>
+              <input type="text" name="driver_name" placeholder=" " required>
+            </label>
+            <label>
+              <span>Bus Number</span>
+              <input type="text" name="bus_number" placeholder=" " required>
+            </label>
+            <label>
+              <span>Phone Number</span>
+              <input type="text" name="phone_number" placeholder=" " required>
+            </label>
+            <label>
+              <span>Note</span>
+              <input type="text" name="note" placeholder=" ">
+            </label>
+            <button class="primary-btn" type="submit">Register</button>
+          </form>
+        </div>
+
+        <div class="manual-panel">
+          <p class="panel-caption">Recommended for hosted/public website</p>
+          <div class="actions-row">
+            <button id="startDeviceScanBtn" class="primary-btn" type="button">Start Device Camera Scan</button>
+            <button id="stopDeviceScanBtn" class="ghost-btn" type="button">Stop</button>
+          </div>
+          <p class="hint" id="deviceScanStatus">Device scanner idle.</p>
+          <div class="video-wrap">
+            <video id="deviceCamera" playsinline muted autoplay></video>
+          </div>
+        </div>
+
+        <div class="manual-panel">
+          <p class="panel-caption">Fallback (manual test scan)</p>
+          <form id="manualScanForm" class="inline-form">
+            <input type="text" name="qr_code" placeholder="Type QR text for testing">
+            <button type="submit" class="ghost-btn">Process QR</button>
+          </form>
+        </div>
+      </article>
+    </section>
+
+    <section class="glass card">
+      <div class="card-head">
+        <div>
+          <p class="eyebrow">Recent Activity</p>
+          <h2>Timeline</h2>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Driver / Admin</th>
+              <th>Bus</th>
+              <th>Phone</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody id="scannerEvents"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="dynamicIsland" class="dynamic-island" role="status" aria-live="polite">
+    <div class="dynamic-inner">
+      <p id="islandTitle" class="dynamic-title"></p>
+      <p id="islandSubtitle" class="dynamic-subtitle"></p>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

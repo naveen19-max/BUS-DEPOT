@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Flow Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Sora:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app-glass.css') }}">
+  <script defer src="{{ url_for('static', filename='report-admin.js') }}"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="glass topbar">
+      <div>
+        <p class="eyebrow"> </p>
+        <h1>Daily Analysis Report</h1>
+        <p class="subtle" id="adminLabel">Report of entry and exit flow.</p>
+      </div>
+      <nav class="nav-links">
+        <a class="nav-pill" href="/scanner">Scanner</a>
+        <a class="nav-pill" href="/dashboard">Dashboard</a>
+        <a class="nav-pill is-active" href="/report">Report</a>
+        <button class="nav-pill nav-button" id="logoutBtn" type="button">Logout</button>
+      </nav>
+    </header>
+
+    <section class="glass card">
+      <div class="card-head">
+        <div>
+          <p class="eyebrow">Report Filters</p>
+          <h2>Pick a Day</h2>
+        </div>
+      </div>
+      <form id="reportFilterForm" class="inline-form">
+        <input type="date" id="reportDate" name="date" required>
+        <button class="primary-btn" type="submit">Load Report</button>
+        <button class="ghost-btn" id="downloadReportBtn" type="button">Download CSV</button>
+      </form>
+      <div class="inline-form" style="margin-top: 10px;">
+        <input type="text" id="reportSearch" placeholder="Filter by driver name, ID, bus or phone">
+      </div>
+    </section>
+
+    <section class="metrics-grid">
+      <article class="glass metric-card">
+        <p>Entries</p>
+        <h2 id="entriesCount">0</h2>
+      </article>
+      <article class="glass metric-card">
+        <p>Exits</p>
+        <h2 id="exitsCount">0</h2>
+      </article>
+      <article class="glass metric-card">
+        <p>Estimated Inside (End of Day)</p>
+        <h2 id="insideEstimate">0</h2>
+      </article>
+      <article class="glass metric-card">
+        <p>Currently Inside</p>
+        <h2 id="insideNow">0</h2>
+      </article>
+    </section>
+
+    <section class="grid-two">
+      <article class="glass card">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">Bar Graph</p>
+            <h2>Entry / Exit</h2>
+          </div>
+        </div>
+        <div class="hourly-chart" id="hourlyChart"></div>
+      </article>
+
+      <article class="glass card">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">Notification</p>
+            <h2>Driver history</h2>
+          </div>
+        </div>
+        <div class="flow-list" id="flowList"></div>
+      </article>
+    </section>
+
+    <section class="glass card">
+      <div class="card-head">
+        <div>
+          <p class="eyebrow">Detailed Logs</p>
+          <h2>Timeline</h2>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Movement</th>
+              <th>Driver Name</th>
+              <th>Driver ID</th>
+              <th>Bus</th>
+              <th>Phone</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody id="reportEvents"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
